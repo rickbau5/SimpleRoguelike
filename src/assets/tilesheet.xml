@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<tiles width="32" height="32">
+    <tile id="0">
+        <name>floor</name>
+        <passable>true</passable>
+    </tile>
+    <tile id="1">
+        <name>column</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="2">
+        <name>wall_corner_inverted_left</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="3">
+        <name>wall_bottom</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="4">
+        <name>wall_corner_inverted_right</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="16">
+        <name>wall_right</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="17">
+        <name>wall_left</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="17">
+        <name>wall_corner_inside_left</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="19">
+        <name>wall_inside</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="20">
+        <name>wall_corner_inside_right</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="32">
+        <name>wall_corner_left</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="33">
+        <name>wall_corner_right</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="34">
+        <name>wall_corner_inside_bottom_left</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="36">
+        <name>wall_corner_inside_bottom_right</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="50">
+        <name>wall_corner_inverted_bottom_left</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="51">
+        <name>wall_top</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="52">
+        <name>wall_corner_inverted_bottom_right</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="64">
+        <name>wall_corner_bottom_left</name>
+        <passable>false</passable>
+    </tile>
+    <tile id="65">
+        <name>wall_corner_bottom_right</name>
+        <passable>false</passable>
+    </tile>
+</tiles>
