@@ -1,6 +1,8 @@
 package com.rickbau5.roguelike;
 
 import com.rickbau5.roguelike.tiles.HidableTile;
+import com.rickbau5.roguelike.tiles.TileTemplate;
+import com.rickbau5.roguelike.tiles.WorldTile;
 import me.vrekt.lunar.location.Location;
 import me.vrekt.lunar.sprite.SpriteManager;
 import me.vrekt.lunar.tile.Tile;
@@ -16,7 +18,7 @@ import java.util.Optional;
  * Created by Rick on 3/14/2017.
  */
 public class SimpleWorld extends World {
-    private ArrayList<HidableTile> worldTiles;
+    private ArrayList<TileTemplate> worldTiles;
 
     public static final int WORLD_OFFSET_X = 2;
     public static final int WORLD_OFFSET_Y = 26;
@@ -28,7 +30,7 @@ public class SimpleWorld extends World {
      * @param width  Width of the world
      * @param height Height of the world
      */
-    public SimpleWorld(String name, int width, int height, ArrayList<HidableTile> tiles) {
+    public SimpleWorld(String name, int width, int height, ArrayList<TileTemplate> tiles) {
         super(name, width, height);
 
         worldTiles = tiles;
@@ -63,12 +65,12 @@ public class SimpleWorld extends World {
             for (int col = 0; col < width; col++) {
                 loc = new Location(col, row);
                 int id = integers[row * width + col];
-                Optional<HidableTile> tile = worldTiles.stream().filter(t -> t.getID() == id).findFirst();
+                Optional<TileTemplate> tile = worldTiles.stream().filter(t -> t.getID() == id).findFirst();
                 if (tile.isPresent()) {
-                    HidableTile copy = tile.get().copy();
-                    copy.setX(loc.getX());
-                    copy.setY(loc.getY());
-                    this.addTile(loc.getX(), loc.getY(), copy);
+                    WorldTile worldTile = (WorldTile)tile.get().createTile();
+                    worldTile.setX(loc.getX());
+                    worldTile.setY(loc.getY());
+                    this.addTile(loc.getX(), loc.getY(), worldTile);
                 } else {
                     System.out.println("No tile found for id: " + id + " and char: " + str.charAt(row * width + col));
                 }

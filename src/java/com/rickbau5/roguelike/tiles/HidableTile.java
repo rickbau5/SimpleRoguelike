@@ -3,7 +3,6 @@ package com.rickbau5.roguelike.tiles;
 import com.rickbau5.roguelike.SimpleWorld;
 import me.vrekt.lunar.entity.Entity;
 import me.vrekt.lunar.location.Location;
-import me.vrekt.lunar.tile.Tile;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,26 +10,14 @@ import java.awt.image.BufferedImage;
 /**
  * Created by Rick on 3/15/2017.
  */
-public class HidableTile extends Tile {
-    private final String name;
+public class HidableTile extends WorldTile {
     private Entity referenceEntity;
-    private Location location;
-    private SimpleWorld world;
 
     private boolean visited = false;
-    private Color alphaColor = new Color(0, 0, 0, 125);
+    private Color hiddenColor = new Color(0, 0, 0, 125);
 
     public HidableTile(BufferedImage texture, int ID, String name, int width, int height, boolean isSolid) {
-        super(texture, ID, width, height, isSolid);
-        this.name = name;
-    }
-
-    public void setReferenceEntity(Entity entity) {
-        this.referenceEntity = entity;
-    }
-
-    public void setWorld(SimpleWorld world) {
-        this.world = world;
+        super(texture, ID, name, width, height, isSolid);
     }
 
     @Override
@@ -48,13 +35,18 @@ public class HidableTile extends Tile {
             visited = true;
         } else if (visited) {
             super.drawTile(graphics, x, y);
-            graphics.setColor(alphaColor);
+            graphics.setColor(hiddenColor);
             graphics.fillRect(x, y, getWidth(), getHeight());
         } else {
             graphics.setColor(Color.black);
             graphics.fillRect(x, y, getWidth(), getHeight());
         }
     }
+
+    public void setReferenceEntity(Entity entity) {
+        this.referenceEntity = entity;
+    }
+
 
     public HidableTile copy() {
         return new HidableTile(getTexture(), getID(), name, getWidth(), getHeight(), isSolid());

@@ -1,6 +1,8 @@
 package com.rickbau5.roguelike;
 
 import com.rickbau5.roguelike.tiles.HidableTile;
+import com.rickbau5.roguelike.tiles.TileTemplate;
+import com.rickbau5.roguelike.tiles.WorldTile;
 import me.vrekt.lunar.Lunar;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class RogueLike {
         lunar = new Lunar();
         lunar.initializeGame("Roguelike", 1280, 730, 20);
 
-        ArrayList<HidableTile> tiles = SpriteSheetReader.loadSpritesAsTiles("tilesheet.png", 0);
+        ArrayList<TileTemplate> tiles = SpriteSheetReader.loadSpritesAsTiles("tilesheet.png", 0);
 
         world = new SimpleWorld("first", 40, 22, tiles);
 

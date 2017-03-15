@@ -1,8 +1,12 @@
 package com.rickbau5.roguelike;
 
 import com.rickbau5.roguelike.tiles.HidableTile;
+import com.rickbau5.roguelike.tiles.HidableTileTemplate;
+import com.rickbau5.roguelike.tiles.TileTemplate;
+import com.rickbau5.roguelike.tiles.WorldTile;
 import me.vrekt.lunar.sprite.SpriteManager;
 import me.vrekt.lunar.sprite.SpriteSheet;
+import me.vrekt.lunar.world.World;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -20,7 +24,7 @@ import java.util.ArrayList;
  * Created by Rick on 3/14/2017.
  */
 public final class SpriteSheetReader {
-    public static ArrayList<HidableTile> loadSpritesAsTiles(String spritePath, int spriteSheetId) {
+    public static ArrayList<TileTemplate> loadSpritesAsTiles(String spritePath, int spriteSheetId) {
         String xmlPath = spritePath.substring(0, spritePath.lastIndexOf('.')) + ".xml";
         File xmlFile = new File(xmlPath);
         assert xmlFile.exists();
@@ -28,7 +32,7 @@ public final class SpriteSheetReader {
         BufferedImage img = SpriteManager.load(spritePath);
         assert img != null;
 
-        ArrayList<HidableTile> tiles = new ArrayList<>();
+        ArrayList<TileTemplate> tiles = new ArrayList<>();
 
         SpriteManager spriteManager = new SpriteManager(new SpriteSheet(img, spriteSheetId));
 
@@ -51,7 +55,7 @@ public final class SpriteSheetReader {
                 int x = id % (img.getWidth() / width);
                 int y = id / (img.getHeight() / height);
 
-                HidableTile tile = new HidableTile(spriteManager.getSectionAt(spriteSheetId, x * width, y * height, width, height), id, name, width, height, !passable);
+                HidableTileTemplate tile = new HidableTileTemplate(spriteManager.getSectionAt(spriteSheetId, x * width, y * height, width, height), id, name, width, height, !passable);
                 tiles.add(tile);
             }
 
