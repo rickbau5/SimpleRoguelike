@@ -1,5 +1,7 @@
 package com.rickbau5.roguelike;
 
+import com.rickbau5.roguelike.entities.Player;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 

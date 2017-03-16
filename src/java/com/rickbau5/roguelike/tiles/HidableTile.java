@@ -1,6 +1,7 @@
 package com.rickbau5.roguelike.tiles;
 
-import com.rickbau5.roguelike.Player;
+import com.rickbau5.roguelike.entities.Player;
+import me.vrekt.lunar.entity.Entity;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,32 +20,35 @@ public class HidableTile extends WorldTile {
     }
 
     @Override
-    public void drawTile(Graphics graphics, int x, int y) {
-        int myX = getX();
-        int myY = getY();
+    public void drawTile(Graphics graphics, int screenX, int screenY) {
+        int x = getX();
+        int y = getY();
         int oX = player.getX();
         int oY = player.getY();
-        double dx = oX - myX;
-        double dy = oY - myY;
+        double dx = oX - x;
+        double dy = oY - y;
         double dist = Math.sqrt(dx*dx + dy*dy);
 
         if (dist <= player.getViewDistance()) {
-            super.drawTile(graphics, x, y);
+            super.drawTile(graphics, screenX, screenY);
             visited = true;
+            Entity entity = world.getEntityAt(x, y);
+            if (entity != null) {
+                entity.drawEntity(graphics);
+            }
         } else if (visited) {
-            super.drawTile(graphics, x, y);
+            super.drawTile(graphics, screenX, screenY);
             graphics.setColor(hiddenColor);
-            graphics.fillRect(x, y, getWidth(), getHeight());
+            graphics.fillRect(screenX, screenY, getWidth(), getHeight());
         } else {
             graphics.setColor(Color.black);
-            graphics.fillRect(x, y, getWidth(), getHeight());
+            graphics.fillRect(screenX, screenY, getWidth(), getHeight());
         }
     }
 
     public void setPlayer(Player player) {
         this.player = player;
     }
-
 
     public HidableTile copy() {
         return new HidableTile(getTexture(), getID(), name, getWidth(), getHeight(), isSolid());

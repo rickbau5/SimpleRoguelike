@@ -1,6 +1,7 @@
 package com.rickbau5.roguelike;
 
-import com.rickbau5.roguelike.tiles.HidableTile;
+import com.rickbau5.roguelike.entities.Monster;
+import com.rickbau5.roguelike.entities.Player;
 import com.rickbau5.roguelike.tiles.TileTemplate;
 import com.rickbau5.roguelike.tiles.WorldTile;
 import me.vrekt.lunar.entity.Entity;
@@ -10,7 +11,6 @@ import me.vrekt.lunar.tile.Tile;
 import me.vrekt.lunar.world.World;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
@@ -105,14 +105,7 @@ public class SimpleWorld extends World {
                 }
             }
         }
-        for (Entity entity : worldEntities) {
-            double dx = entity.getX() - player.getX();
-            double dy = entity.getY() - player.getY();
-            double dist = Math.sqrt(dx*dx + dy*dy);
-            if (dist <= player.getViewDistance()) {
-                entity.drawEntity(graphics);
-            }
-        }
+        // Don't draw entities here - tiles are responsible for drawing everything on them.
     }
 
     public void markEntityForRemoval(Entity entity) {

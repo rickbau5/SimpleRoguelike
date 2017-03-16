@@ -1,5 +1,6 @@
 package com.rickbau5.roguelike;
 
+import com.rickbau5.roguelike.entities.Player;
 import com.rickbau5.roguelike.tiles.HidableTile;
 import me.vrekt.lunar.Game;
 import me.vrekt.lunar.state.GameState;

@@ -1,5 +1,6 @@
-package com.rickbau5.roguelike;
+package com.rickbau5.roguelike.entities;
 
+import com.rickbau5.roguelike.SimpleWorld;
 import me.vrekt.lunar.entity.Entity;
 import me.vrekt.lunar.entity.living.LivingEntity;
 import me.vrekt.lunar.location.Location;
