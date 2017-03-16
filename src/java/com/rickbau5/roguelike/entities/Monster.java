@@ -26,12 +26,12 @@ public class Monster extends LivingEntity {
     public void drawEntity(Graphics graphics) {
         if (removed)
             return;
-        Location loc = world.worldToScreenLocation(x, y, 32, 32);
+        Location loc = world.worldToScreenLocation(x, y);
         graphics.drawImage(getTexture(), loc.getX(), loc.getY(), 32, 32, null);
 
         if (health < maxHealth) {
             graphics.setColor(Color.red);
-            graphics.fillRect(loc.getX(), loc.getY(), (int)(32 * (health / maxHealth)), 6);
+            graphics.fillRect(loc.getX(), loc.getY(), (int) (32 * (health / maxHealth)), 6);
         }
     }
 

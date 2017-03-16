@@ -14,6 +14,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * Created by Rick on 3/14/2017.
@@ -24,7 +25,13 @@ public class SimpleWorld extends World {
 
     public static final int WORLD_OFFSET_X = 2;
     public static final int WORLD_OFFSET_Y = 26;
+
+    private final int tileSizeX;
+    private final int tileSizeY;
+
     private Player player;
+
+    private Random random = new Random(666);
 
     /**
      * Initialize the world.
@@ -33,63 +40,71 @@ public class SimpleWorld extends World {
      * @param width  Width of the world
      * @param height Height of the world
      */
-    public SimpleWorld(String name, int width, int height, ArrayList<TileTemplate> tiles) {
+    public SimpleWorld(String name, int width, int height, int tileSizeX, int tileSizeY, ArrayList<TileTemplate> tiles) {
         super(name, width, height);
 
         worldTiles = tiles;
         entityRemovalList = new ArrayList<>();
 
         buildMap();
+        this.tileSizeX = tileSizeX;
+        this.tileSizeY = tileSizeY;
     }
 
-    private void buildMap() {
-        String str = "";
-        str += "32";
-        for (int j = 0; j < width - 2; j++) {
-            str += " 51";
-        }
-        str += " 33";
-        for (int i = 0; i < height - 2; i++) {
-            str += " 17";
-            for (int j = 0; j < width - 2; j++) {
-                str += " 0";
-            }
-            str += " 16";
-        }
-        str += " 64";
-        for (int j = 0; j < width - 2; j++) {
-            str += " 3";
-        }
-        str += " 65";
-        Integer[] integers = Arrays.stream(str.split(" "))
-                .map(Integer::parseInt)
-                .toArray(Integer[]::new);
-        Location loc;
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
-                loc = new Location(col, row);
-                int id = integers[row * width + col];
-                Optional<TileTemplate> tile = worldTiles.stream().filter(t -> t.getID() == id).findFirst();
-                if (tile.isPresent()) {
-                    WorldTile worldTile = (WorldTile)tile.get().createTile();
-                    worldTile.setX(loc.getX());
-                    worldTile.setY(loc.getY());
-                    this.addTile(loc.getX(), loc.getY(), worldTile);
-                } else {
-                    System.out.println("No tile found for id: " + id + " and char: " + str.charAt(row * width + col));
-                }
-            }
-         }
+    public int getTileHeight() {
+        return tileSizeY;
+    }
 
-         addEntity(new Monster(this, SpriteManager.load("monster1.png"), 10, 10, 32, 32, 1, 100f, 1.0));
+    public int getTileWidth() {
+        return tileSizeX;
     }
 
     public void setPlayer(Player player) {
         this.player = player;
     }
 
-    public Location worldToScreenLocation(int x, int y, int width, int height) {
-        return new Location(WORLD_OFFSET_X + x * width, WORLD_OFFSET_Y + y * height);
+    public Player getPlayer() {
+        return player;
+    }
+
+    public boolean isPointPassable(int pixelX, int pixelY) {
+        int tileX = (pixelX - WORLD_OFFSET_X) / tileSizeX;
+        int tileY = (pixelY - WORLD_OFFSET_Y) / tileSizeY;
+        if (tileX < 0 || tileX >= width
+                || tileY < 0 || tileY >= height) {
+            return false;
+        }
+
+        Tile tile = getTileAt(tileX, tileY);
+        if (tile == null) {
+            // No tile, return true?
+            return true;
+        }
+
+        // Right now solidity is the only measure we have of "passability"
+        return !tile.isSolid();
+    }
+
+    public Location worldToScreenLocation(Location worldLocation) {
+        return worldToScreenLocation(worldLocation.getX(), worldLocation.getY());
+    }
+
+    public Location worldToScreenLocation(int worldX, int worldY) {
+        return new Location(WORLD_OFFSET_X + worldX * tileSizeX, WORLD_OFFSET_Y + worldY * tileSizeY);
+    }
+
+    public Location screenToWorldLocation(int pixelX, int pixelY) {
+        return new Location((pixelX - WORLD_OFFSET_X) / tileSizeX, (pixelY - WORLD_OFFSET_Y) / tileSizeY);
+    }
+
+    public void markEntityForRemoval(Entity entity) {
+        entityRemovalList.add(entity);
+    }
+
+    @Override
+    public void onTick() {
+        entityRemovalList.forEach(this::removeEntity);
+        worldEntities.forEach(Entity::updateEntity);
     }
 
     @Override
@@ -108,13 +123,50 @@ public class SimpleWorld extends World {
         // Don't draw entities here - tiles are responsible for drawing everything on them.
     }
 
-    public void markEntityForRemoval(Entity entity) {
-        entityRemovalList.add(entity);
-    }
+    private void buildMap() {
+        String str = "";
+        str += "32";
+        for (int j = 0; j < width - 2; j++) {
+            str += " 51";
+        }
+        str += " 33";
+        for (int i = 0; i < height - 2; i++) {
+            str += " 17";
+            for (int j = 0; j < width - 2; j++) {
+                if (random.nextDouble() > .05) {
+                    str += " 0";
+                } else {
+                    str += " 1";
+                }
+            }
+            str += " 16";
+        }
+        str += " 64";
+        for (int j = 0; j < width - 2; j++) {
+            str += " 3";
+        }
+        str += " 65";
 
-    @Override
-    public void onTick() {
-        entityRemovalList.forEach(this::removeEntity);
-        worldEntities.forEach(Entity::updateEntity);
+        Integer[] integers = Arrays.stream(str.split(" "))
+                .map(Integer::parseInt)
+                .toArray(Integer[]::new);
+        Location loc;
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                loc = new Location(col, row);
+                int id = integers[row * width + col];
+                Optional<TileTemplate> tile = worldTiles.stream().filter(t -> t.getID() == id).findFirst();
+                if (tile.isPresent()) {
+                    WorldTile worldTile = (WorldTile) tile.get().createTile();
+                    worldTile.setX(loc.getX());
+                    worldTile.setY(loc.getY());
+                    this.addTile(loc.getX(), loc.getY(), worldTile);
+                } else {
+                    System.out.println("No tile found for id: " + id + " and char: " + str.charAt(row * width + col));
+                }
+            }
+        }
+
+        addEntity(new Monster(this, SpriteManager.load("monster1.png"), 10, 10, 32, 32, 1, 100f, 1.0));
     }
 }

@@ -1,7 +1,10 @@
 package com.rickbau5.roguelike.tiles;
 
+import com.rickbau5.roguelike.RayCast;
 import com.rickbau5.roguelike.entities.Player;
 import me.vrekt.lunar.entity.Entity;
+import me.vrekt.lunar.location.Location;
+import me.vrekt.lunar.utilities.Utilities;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -33,32 +36,51 @@ public class HidableTile extends WorldTile {
         int y = getY();
         int oX = player.getX();
         int oY = player.getY();
-        double dx = oX - x;
-        double dy = oY - y;
-        double dist = Math.sqrt(dx*dx + dy*dy);
+        double dist = Utilities.distance(x, y, oX, oY);
 
         if (dist <= player.getViewDistance()) {
-            super.drawTile(graphics, screenX, screenY);
-            visited = true;
-            Entity entity = world.getEntityAt(x, y);
-            if (entity != null) {
-                entity.drawEntity(graphics);
+            RayCast.RayCastResult res = LOSCheck(oX, oY);
+            if (!res.didCollide() || res.getCollidedTile() == this) {
+                super.drawTile(graphics, screenX, screenY);
+                visited = true;
+                Entity entity = world.getEntityAt(x, y);
+                if (entity != null) {
+                    entity.drawEntity(graphics);
+                }
+
+                return;
             }
-        } else if (visited) {
-            super.drawTile(graphics, screenX, screenY);
-            graphics.setColor(hiddenColor);
-            graphics.fillRect(screenX, screenY, getWidth(), getHeight());
-        } else {
-            graphics.setColor(Color.black);
-            graphics.fillRect(screenX, screenY, getWidth(), getHeight());
         }
+
+        if (visited) {
+            drawVisited(graphics, screenX, screenY);
+        } else {
+            drawHidden(graphics, screenX, screenY);
+        }
+    }
+
+    private void drawVisited(Graphics graphics, int screenX, int screenY) {
+        super.drawTile(graphics, screenX, screenY);
+        graphics.setColor(hiddenColor);
+        graphics.fillRect(screenX, screenY, getWidth(), getHeight());
+    }
+
+    private void drawHidden(Graphics graphics, int screenX, int screenY) {
+        graphics.setColor(Color.black);
+        graphics.fillRect(screenX, screenY, getWidth(), getHeight());
+    }
+
+    private RayCast.RayCastResult LOSCheck(int x, int y) {
+        Location other = world.worldToScreenLocation(x, y);
+        Location tile = world.worldToScreenLocation(getX(), getY());
+
+        RayCast rayCast = new RayCast(world);
+
+        return rayCast
+            .doRayCast(other.getX() + 16, other.getY() + 16, tile.getX() + 16, tile.getY() + 16);
     }
 
     public void setPlayer(Player player) {
         this.player = player;
-    }
-
-    public HidableTile copy() {
-        return new HidableTile(getTexture(), getID(), name, getWidth(), getHeight(), isSolid());
     }
 }

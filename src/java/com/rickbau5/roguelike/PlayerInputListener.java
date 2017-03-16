@@ -18,13 +18,17 @@ public class PlayerInputListener implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
         switch (e.getKeyChar()) {
-            case 'a': player.attemptMove(-1, 0);
+            case 'a':
+                player.attemptMove(-1, 0);
                 break;
-            case 'd': player.attemptMove(1, 0);
+            case 'd':
+                player.attemptMove(1, 0);
                 break;
-            case 's': player.attemptMove(0, 1);
+            case 's':
+                player.attemptMove(0, 1);
                 break;
-            case 'w': player.attemptMove(0, -1);
+            case 'w':
+                player.attemptMove(0, -1);
                 break;
             default:
                 System.out.println(e.getKeyChar());

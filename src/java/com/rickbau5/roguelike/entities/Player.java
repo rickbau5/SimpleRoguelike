@@ -49,7 +49,7 @@ public class Player extends LivingEntity {
 
     @Override
     public void drawEntity(Graphics graphics) {
-        Location loc = world.worldToScreenLocation(x, y, width, height);
+        Location loc = world.worldToScreenLocation(x, y);
         graphics.drawImage(texture, loc.getX(), loc.getY(), null);
         graphics.setColor(Color.blue);
         graphics.drawRect(loc.getX(), loc.getY(), width, height);

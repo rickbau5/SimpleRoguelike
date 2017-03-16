@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * A WorldTile is simple a tile that has an association with a world.
- *
+ * <p>
  * Created by Rick Boss on 3/15/2017.
  */
 public abstract class WorldTile extends Tile {

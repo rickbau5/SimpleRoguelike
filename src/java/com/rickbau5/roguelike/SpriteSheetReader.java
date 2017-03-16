@@ -1,12 +1,9 @@
 package com.rickbau5.roguelike;
 
-import com.rickbau5.roguelike.tiles.HidableTile;
 import com.rickbau5.roguelike.tiles.HidableTileTemplate;
 import com.rickbau5.roguelike.tiles.TileTemplate;
-import com.rickbau5.roguelike.tiles.WorldTile;
 import me.vrekt.lunar.sprite.SpriteManager;
 import me.vrekt.lunar.sprite.SpriteSheet;
-import me.vrekt.lunar.world.World;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
