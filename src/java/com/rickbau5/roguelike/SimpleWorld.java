@@ -3,6 +3,7 @@ package com.rickbau5.roguelike;
 import com.rickbau5.roguelike.tiles.HidableTile;
 import com.rickbau5.roguelike.tiles.TileTemplate;
 import com.rickbau5.roguelike.tiles.WorldTile;
+import me.vrekt.lunar.entity.Entity;
 import me.vrekt.lunar.location.Location;
 import me.vrekt.lunar.sprite.SpriteManager;
 import me.vrekt.lunar.tile.Tile;
@@ -19,9 +20,11 @@ import java.util.Optional;
  */
 public class SimpleWorld extends World {
     private ArrayList<TileTemplate> worldTiles;
+    private ArrayList<Entity> entityRemovalList;
 
     public static final int WORLD_OFFSET_X = 2;
     public static final int WORLD_OFFSET_Y = 26;
+    private Player player;
 
     /**
      * Initialize the world.
@@ -34,6 +37,7 @@ public class SimpleWorld extends World {
         super(name, width, height);
 
         worldTiles = tiles;
+        entityRemovalList = new ArrayList<>();
 
         buildMap();
     }
@@ -76,6 +80,12 @@ public class SimpleWorld extends World {
                 }
             }
          }
+
+         addEntity(new Monster(this, SpriteManager.load("monster1.png"), 10, 10, 32, 32, 1, 100f, 1.0));
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     public Location worldToScreenLocation(int x, int y, int width, int height) {
@@ -95,10 +105,23 @@ public class SimpleWorld extends World {
                 }
             }
         }
+        for (Entity entity : worldEntities) {
+            double dx = entity.getX() - player.getX();
+            double dy = entity.getY() - player.getY();
+            double dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist <= player.getViewDistance()) {
+                entity.drawEntity(graphics);
+            }
+        }
+    }
+
+    public void markEntityForRemoval(Entity entity) {
+        entityRemovalList.add(entity);
     }
 
     @Override
     public void onTick() {
-
+        entityRemovalList.forEach(this::removeEntity);
+        worldEntities.forEach(Entity::updateEntity);
     }
 }

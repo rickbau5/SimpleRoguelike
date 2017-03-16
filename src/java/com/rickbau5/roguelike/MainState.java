@@ -24,6 +24,7 @@ public class MainState extends GameState {
         super(priority);
         this.world = world;
         this.player = new Player(world, 0, 20, 11, 100, 1);
+        world.setPlayer(player);
         game.clearKeyListeners();
         game.addKeyListener(new PlayerInputListener(player));
     }
@@ -36,7 +37,7 @@ public class MainState extends GameState {
                     HidableTile tile = ((HidableTile) world.getTileAt(col, row));
                     tile.setX(col);
                     tile.setY(row);
-                    tile.setReferenceEntity(player);
+                    tile.setPlayer(player);
                     tile.setWorld(world);
                 }
             }
@@ -48,7 +49,7 @@ public class MainState extends GameState {
 
     @Override
     public void onTick() {
-
         player.updateEntity();
+        world.onTick();
     }
 }

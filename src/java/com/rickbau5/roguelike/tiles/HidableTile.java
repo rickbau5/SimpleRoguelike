@@ -1,8 +1,6 @@
 package com.rickbau5.roguelike.tiles;
 
-import com.rickbau5.roguelike.SimpleWorld;
-import me.vrekt.lunar.entity.Entity;
-import me.vrekt.lunar.location.Location;
+import com.rickbau5.roguelike.Player;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,7 +9,7 @@ import java.awt.image.BufferedImage;
  * Created by Rick on 3/15/2017.
  */
 public class HidableTile extends WorldTile {
-    private Entity referenceEntity;
+    private Player player;
 
     private boolean visited = false;
     private Color hiddenColor = new Color(0, 0, 0, 125);
@@ -24,13 +22,13 @@ public class HidableTile extends WorldTile {
     public void drawTile(Graphics graphics, int x, int y) {
         int myX = getX();
         int myY = getY();
-        int oX = referenceEntity.getX();
-        int oY = referenceEntity.getY();
+        int oX = player.getX();
+        int oY = player.getY();
         double dx = oX - myX;
         double dy = oY - myY;
         double dist = Math.sqrt(dx*dx + dy*dy);
 
-        if (dist < 4) {
+        if (dist <= player.getViewDistance()) {
             super.drawTile(graphics, x, y);
             visited = true;
         } else if (visited) {
@@ -43,8 +41,8 @@ public class HidableTile extends WorldTile {
         }
     }
 
-    public void setReferenceEntity(Entity entity) {
-        this.referenceEntity = entity;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
 
