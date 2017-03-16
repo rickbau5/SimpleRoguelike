@@ -7,6 +7,14 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
+ * A HidableTile is one that is aware of a Player. If the player is within view distance,
+ * the tile and all contents will be rendered. If the player is outside of view distance,
+ * the tile will either be rendered with "shade" over it if the player has been there, or
+ * as a black space if the player has not previously seen the tile.
+ *
+ * Note that this tile is responsible for rendering it's contents, such as entities. This
+ * consolidates the calculation of LOS to one location.
+ *
  * Created by Rick on 3/15/2017.
  */
 public class HidableTile extends WorldTile {
