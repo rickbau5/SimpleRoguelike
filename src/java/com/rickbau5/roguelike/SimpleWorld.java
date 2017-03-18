@@ -23,13 +23,8 @@ public class SimpleWorld extends World {
     private ArrayList<TileTemplate> worldTiles;
     private ArrayList<Entity> entityRemovalList;
 
-    public static final int WORLD_OFFSET_X = 2;
-    public static final int WORLD_OFFSET_Y = 26;
-
-    private final int tileSizeX;
-    private final int tileSizeY;
-
     private Player player;
+    private Color gridColor = new Color(255, 255, 255, 50);
 
     private Random random = new Random(666);
 
@@ -41,22 +36,15 @@ public class SimpleWorld extends World {
      * @param height Height of the world
      */
     public SimpleWorld(String name, int width, int height, int tileSizeX, int tileSizeY, ArrayList<TileTemplate> tiles) {
-        super(name, width, height);
+        super(name, width, height, tileSizeX, tileSizeY);
 
         worldTiles = tiles;
         entityRemovalList = new ArrayList<>();
 
+        worldAnchorX = 2;
+        worldAnchorY = -6;
+
         buildMap();
-        this.tileSizeX = tileSizeX;
-        this.tileSizeY = tileSizeY;
-    }
-
-    public int getTileHeight() {
-        return tileSizeY;
-    }
-
-    public int getTileWidth() {
-        return tileSizeX;
     }
 
     public void setPlayer(Player player) {
@@ -65,36 +53,6 @@ public class SimpleWorld extends World {
 
     public Player getPlayer() {
         return player;
-    }
-
-    public boolean isPointPassable(int pixelX, int pixelY) {
-        int tileX = (pixelX - WORLD_OFFSET_X) / tileSizeX;
-        int tileY = (pixelY - WORLD_OFFSET_Y) / tileSizeY;
-        if (tileX < 0 || tileX >= width
-                || tileY < 0 || tileY >= height) {
-            return false;
-        }
-
-        Tile tile = getTileAt(tileX, tileY);
-        if (tile == null) {
-            // No tile, return true?
-            return true;
-        }
-
-        // Right now solidity is the only measure we have of "passability"
-        return !tile.isSolid();
-    }
-
-    public Location worldToScreenLocation(Location worldLocation) {
-        return worldToScreenLocation(worldLocation.getX(), worldLocation.getY());
-    }
-
-    public Location worldToScreenLocation(int worldX, int worldY) {
-        return new Location(WORLD_OFFSET_X + worldX * tileSizeX, WORLD_OFFSET_Y + worldY * tileSizeY);
-    }
-
-    public Location screenToWorldLocation(int pixelX, int pixelY) {
-        return new Location((pixelX - WORLD_OFFSET_X) / tileSizeX, (pixelY - WORLD_OFFSET_Y) / tileSizeY);
     }
 
     public void markEntityForRemoval(Entity entity) {
@@ -113,10 +71,10 @@ public class SimpleWorld extends World {
             for (int col = 0; col < width; col++) {
                 Tile t = getTileAt(col, row);
                 if (t != null) {
-                    t.drawTile(graphics, WORLD_OFFSET_X + col * t.getWidth(), WORLD_OFFSET_Y + row * t.getHeight());
+                    t.drawTile(graphics, worldAnchorX + col * t.getWidth(), worldAnchorY + row * t.getHeight());
 
-                    //graphics.setColor(Color.white);
-                    //graphics.drawRect(WORLD_OFFSET_X + col * t.getWidth(), WORLD_OFFSET_Y + row * t.getHeight(), t.getWidth(), t.getHeight());
+                    graphics.setColor(gridColor);
+                    graphics.drawRect(worldAnchorX + col * t.getWidth(), worldAnchorY + row * t.getHeight(), t.getWidth(), t.getHeight());
                 }
             }
         }

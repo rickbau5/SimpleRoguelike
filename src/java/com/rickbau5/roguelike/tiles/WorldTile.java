@@ -14,8 +14,8 @@ public abstract class WorldTile extends Tile {
     protected final String name;
     protected SimpleWorld world;
 
-    public WorldTile(BufferedImage texture, int ID, String name, int width, int height, boolean isSolid) {
-        super(texture, ID, width, height, isSolid);
+    public WorldTile(BufferedImage texture, int ID, String name, int width, int height, boolean isSolid, boolean isVisible) {
+        super(texture, ID, width, height, isSolid, isVisible);
 
         this.name = name;
     }

@@ -1,6 +1,6 @@
 package com.rickbau5.roguelike.tiles;
 
-import com.rickbau5.roguelike.RayCast;
+import me.vrekt.lunar.raycast.RayCast;
 import com.rickbau5.roguelike.entities.Player;
 import me.vrekt.lunar.entity.Entity;
 import me.vrekt.lunar.location.Location;
@@ -27,7 +27,7 @@ public class HidableTile extends WorldTile {
     private Color hiddenColor = new Color(0, 0, 0, 125);
 
     public HidableTile(BufferedImage texture, int ID, String name, int width, int height, boolean isSolid) {
-        super(texture, ID, name, width, height, isSolid);
+        super(texture, ID, name, width, height, isSolid, false);
     }
 
     @Override

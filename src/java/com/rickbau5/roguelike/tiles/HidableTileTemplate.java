@@ -9,7 +9,7 @@ public class HidableTileTemplate extends TileTemplate<HidableTile> {
     private final String name;
 
     public HidableTileTemplate(BufferedImage texture, int ID, String name, int width, int height, boolean isSolid) {
-        super(texture, ID, width, height, isSolid);
+        super(texture, ID, width, height, isSolid, false);
 
         this.name = name;
     }
