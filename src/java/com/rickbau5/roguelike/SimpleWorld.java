@@ -1,7 +1,7 @@
 package com.rickbau5.roguelike;
 
 import com.rickbau5.roguelike.entities.Monster;
-import com.rickbau5.roguelike.entities.Player;
+import com.rickbau5.roguelike.entities.RogueLikePlayer;
 import com.rickbau5.roguelike.tiles.TileTemplate;
 import com.rickbau5.roguelike.tiles.WorldTile;
 import me.vrekt.lunar.entity.Entity;
@@ -21,9 +21,8 @@ import java.util.Random;
  */
 public class SimpleWorld extends World {
     private ArrayList<TileTemplate> worldTiles;
-    private ArrayList<Entity> entityRemovalList;
 
-    private Player player;
+    private RogueLikePlayer rogueLikePlayer;
     private Color gridColor = new Color(255, 255, 255, 50);
 
     private Random random = new Random(666);
@@ -39,29 +38,25 @@ public class SimpleWorld extends World {
         super(name, width, height, tileSizeX, tileSizeY);
 
         worldTiles = tiles;
-        entityRemovalList = new ArrayList<>();
 
         worldAnchorX = 2;
-        worldAnchorY = -6;
+        worldAnchorY = 24;
 
         buildMap();
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setRogueLikePlayer(RogueLikePlayer rogueLikePlayer) {
+        this.rogueLikePlayer = rogueLikePlayer;
     }
 
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void markEntityForRemoval(Entity entity) {
-        entityRemovalList.add(entity);
+    public RogueLikePlayer getRogueLikePlayer() {
+        return rogueLikePlayer;
     }
 
     @Override
     public void onTick() {
-        entityRemovalList.forEach(this::removeEntity);
+        // removeQueuedEntities();
+        // addQueuedEntities();
         worldEntities.forEach(Entity::updateEntity);
     }
 
@@ -125,6 +120,10 @@ public class SimpleWorld extends World {
             }
         }
 
-        addEntity(new Monster(this, SpriteManager.load("monster1.png"), 10, 10, 32, 32, 1, 100f, 1.0));
+        addEntity(new Monster(this, SpriteManager.load("monster1.png"), 10, 10, 32, 32, getNextEntityIdAndInc(), 100f, 1.0));
+    }
+
+    public Random getRandom() {
+        return random;
     }
 }

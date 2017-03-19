@@ -1,7 +1,10 @@
 package com.rickbau5.roguelike;
 
+import com.rickbau5.roguelike.client.RogueLikeClient;
+import com.rickbau5.roguelike.entities.RogueLikePlayer;
 import com.rickbau5.roguelike.tiles.TileTemplate;
 import me.vrekt.lunar.Lunar;
+import me.vrekt.lunar.server.NetworkedGame;
 import me.vrekt.lunar.utilities.Utilities;
 
 import java.util.ArrayList;
@@ -32,6 +35,8 @@ public class RogueLike {
 
         world = new SimpleWorld("first", 40, 22, 32, 32, tiles);
 
-        lunar.getGame().addToStack(new MainState(lunar.getGame(), world, 1));
+        RogueLikePlayer player = new RogueLikePlayer(world, 0, 20, 11, 100, 1);
+
+        lunar.getGame().addToStack(new MainState(lunar.getGame(), world, player, 1));
     }
 }

@@ -1,7 +1,7 @@
 package com.rickbau5.roguelike.tiles;
 
+import com.rickbau5.roguelike.entities.RogueLikePlayer;
 import me.vrekt.lunar.raycast.RayCast;
-import com.rickbau5.roguelike.entities.Player;
 import me.vrekt.lunar.entity.Entity;
 import me.vrekt.lunar.location.Location;
 import me.vrekt.lunar.utilities.Utilities;
@@ -10,10 +10,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * A HidableTile is one that is aware of a Player. If the player is within view distance,
- * the tile and all contents will be rendered. If the player is outside of view distance,
- * the tile will either be rendered with "shade" over it if the player has been there, or
- * as a black space if the player has not previously seen the tile.
+ * A HidableTile is one that is aware of a RogueLikePlayer. If the rogueLikePlayer is within view distance,
+ * the tile and all contents will be rendered. If the rogueLikePlayer is outside of view distance,
+ * the tile will either be rendered with "shade" over it if the rogueLikePlayer has been there, or
+ * as a black space if the rogueLikePlayer has not previously seen the tile.
  *
  * Note that this tile is responsible for rendering it's contents, such as entities. This
  * consolidates the calculation of LOS to one location.
@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage;
  * Created by Rick on 3/15/2017.
  */
 public class HidableTile extends WorldTile {
-    private Player player;
+    private RogueLikePlayer rogueLikePlayer;
 
     private boolean visited = false;
     private Color hiddenColor = new Color(0, 0, 0, 125);
@@ -34,11 +34,11 @@ public class HidableTile extends WorldTile {
     public void drawTile(Graphics graphics, int screenX, int screenY) {
         int x = getX();
         int y = getY();
-        int oX = player.getX();
-        int oY = player.getY();
+        int oX = rogueLikePlayer.getX();
+        int oY = rogueLikePlayer.getY();
         double dist = Utilities.distance(x, y, oX, oY);
 
-        if (dist <= player.getViewDistance()) {
+        if (dist <= rogueLikePlayer.getViewDistance()) {
             RayCast.RayCastResult res = LOSCheck(oX, oY);
             if (!res.didCollide() || res.getCollidedTile() == this) {
                 super.drawTile(graphics, screenX, screenY);
@@ -80,7 +80,7 @@ public class HidableTile extends WorldTile {
             .doRayCast(other.getX() + 16, other.getY() + 16, tile.getX() + 16, tile.getY() + 16);
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setRogueLikePlayer(RogueLikePlayer rogueLikePlayer) {
+        this.rogueLikePlayer = rogueLikePlayer;
     }
 }

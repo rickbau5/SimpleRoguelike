@@ -38,8 +38,14 @@ public class Monster extends LivingEntity {
     @Override
     public void updateEntity() {
         if (health <= 0 && !removed) {
-            world.markEntityForRemoval(this);
+            /*
+            world.queueEntityForRemoval(this);
+            world.queueEntityForAdd(new Monster(world, texture,
+                    world.getRandom().nextInt(world.getWidth()),
+                    world.getRandom().nextInt(world.getHeight()),
+                    width, height, entityID + 1, 100, speed));
             removed = true;
+            */
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.rickbau5.roguelike;
 
-import com.rickbau5.roguelike.entities.Player;
+import com.rickbau5.roguelike.entities.RogueLikePlayer;
+import me.vrekt.lunar.server.Networking;
+import me.vrekt.lunar.server.packets.EntityMovementPacket;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -9,30 +11,34 @@ import java.awt.event.KeyListener;
  * Created by Rick on 3/15/2017.
  */
 public class PlayerInputListener implements KeyListener {
-    private final Player player;
+    private final RogueLikePlayer rogueLikePlayer;
 
-    public PlayerInputListener(Player player) {
-        this.player = player;
+    public PlayerInputListener(RogueLikePlayer rogueLikePlayer) {
+        this.rogueLikePlayer = rogueLikePlayer;
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
+        boolean moved = false;
         switch (e.getKeyChar()) {
             case 'a':
-                player.attemptMove(-1, 0);
+                moved = rogueLikePlayer.attemptMove(-1, 0);
                 break;
             case 'd':
-                player.attemptMove(1, 0);
+                moved = rogueLikePlayer.attemptMove(1, 0);
                 break;
             case 's':
-                player.attemptMove(0, 1);
+                moved = rogueLikePlayer.attemptMove(0, 1);
                 break;
             case 'w':
-                player.attemptMove(0, -1);
+                moved = rogueLikePlayer.attemptMove(0, -1);
                 break;
             default:
-                System.out.println(e.getKeyChar());
                 break;
+        }
+
+        if (moved) {
+            Networking.sendToAllClients(new EntityMovementPacket(rogueLikePlayer));
         }
     }
 
