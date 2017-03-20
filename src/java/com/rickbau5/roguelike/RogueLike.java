@@ -1,11 +1,8 @@
 package com.rickbau5.roguelike;
 
-import com.rickbau5.roguelike.client.RogueLikeClient;
 import com.rickbau5.roguelike.entities.RogueLikePlayer;
 import com.rickbau5.roguelike.tiles.TileTemplate;
 import me.vrekt.lunar.Lunar;
-import me.vrekt.lunar.server.NetworkedGame;
-import me.vrekt.lunar.utilities.Utilities;
 
 import java.util.ArrayList;
 

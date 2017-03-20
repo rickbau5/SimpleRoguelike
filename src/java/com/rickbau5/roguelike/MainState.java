@@ -1,8 +1,8 @@
 package com.rickbau5.roguelike;
 
-import com.rickbau5.roguelike.entities.RogueLikePlayer;
 import com.rickbau5.roguelike.tiles.HidableTile;
 import me.vrekt.lunar.Game;
+import me.vrekt.lunar.entity.living.player.PlayerEntity;
 import me.vrekt.lunar.state.GameState;
 
 import java.awt.*;
@@ -12,7 +12,7 @@ import java.awt.*;
  */
 public class MainState extends GameState {
     private SimpleWorld world;
-    private RogueLikePlayer rogueLikePlayer;
+    private PlayerEntity player;
 
     private boolean initialized = false;
 
@@ -21,13 +21,13 @@ public class MainState extends GameState {
      *
      * @param priority
      */
-    public MainState(Game game, SimpleWorld world, RogueLikePlayer player, int priority) {
+    public MainState(Game game, SimpleWorld world, PlayerEntity player, int priority) {
         super(priority);
         this.world = world;
-        this.rogueLikePlayer = player;
-        world.setRogueLikePlayer(rogueLikePlayer);
+        this.player = player;
+        world.setPlayer(this.player);
         game.clearKeyListeners();
-        game.addKeyListener(new PlayerInputListener(rogueLikePlayer));
+        game.addKeyListener(new PlayerInputListener(this.player));
     }
 
     @Override
@@ -38,19 +38,19 @@ public class MainState extends GameState {
                     HidableTile tile = ((HidableTile) world.getTileAt(col, row));
                     tile.setX(col);
                     tile.setY(row);
-                    tile.setRogueLikePlayer(rogueLikePlayer);
+                    tile.setPlayerEntity(player);
                     tile.setWorld(world);
                 }
             }
             initialized = true;
         }
         world.onDraw(graphics);
-        rogueLikePlayer.drawEntity(graphics);
+        player.drawEntity(graphics);
     }
 
     @Override
     public void onTick() {
-        rogueLikePlayer.updateEntity();
+        player.updateEntity();
         world.onTick();
     }
 }

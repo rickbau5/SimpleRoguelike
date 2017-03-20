@@ -1,10 +1,10 @@
 package com.rickbau5.roguelike;
 
 import com.rickbau5.roguelike.entities.Monster;
-import com.rickbau5.roguelike.entities.RogueLikePlayer;
 import com.rickbau5.roguelike.tiles.TileTemplate;
 import com.rickbau5.roguelike.tiles.WorldTile;
 import me.vrekt.lunar.entity.Entity;
+import me.vrekt.lunar.entity.living.player.PlayerEntity;
 import me.vrekt.lunar.location.Location;
 import me.vrekt.lunar.sprite.SpriteManager;
 import me.vrekt.lunar.tile.Tile;
@@ -22,7 +22,7 @@ import java.util.Random;
 public class SimpleWorld extends World {
     private ArrayList<TileTemplate> worldTiles;
 
-    private RogueLikePlayer rogueLikePlayer;
+    private PlayerEntity player;
     private Color gridColor = new Color(255, 255, 255, 50);
 
     private Random random = new Random(666);
@@ -45,18 +45,17 @@ public class SimpleWorld extends World {
         buildMap();
     }
 
-    public void setRogueLikePlayer(RogueLikePlayer rogueLikePlayer) {
-        this.rogueLikePlayer = rogueLikePlayer;
+    public void setPlayer(PlayerEntity player) {
+        this.player = player;
     }
 
-    public RogueLikePlayer getRogueLikePlayer() {
-        return rogueLikePlayer;
+    public PlayerEntity getPlayer() {
+        return player;
     }
 
     @Override
     public void onTick() {
-        // removeQueuedEntities();
-        // addQueuedEntities();
+        super.onTick();
         worldEntities.forEach(Entity::updateEntity);
     }
 

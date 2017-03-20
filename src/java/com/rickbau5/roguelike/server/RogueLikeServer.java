@@ -1,13 +1,15 @@
 package com.rickbau5.roguelike.server;
 
-import com.rickbau5.roguelike.*;
-import com.rickbau5.roguelike.entities.RogueLikePlayer;
+import com.rickbau5.roguelike.MainState;
+import com.rickbau5.roguelike.SimpleWorld;
+import com.rickbau5.roguelike.SpriteSheetReader;
 import com.rickbau5.roguelike.tiles.TileTemplate;
 import me.vrekt.lunar.Lunar;
-import me.vrekt.lunar.entity.living.player.PlayerEntity;
+import me.vrekt.lunar.entity.living.player.LocalPlayer;
 import me.vrekt.lunar.server.NetworkedGame;
 import me.vrekt.lunar.server.Networking;
 import me.vrekt.lunar.server.SimpleServer;
+import me.vrekt.lunar.sprite.SpriteManager;
 import me.vrekt.lunar.world.World;
 
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 public class RogueLikeServer extends NetworkedGame {
     public Lunar lunar;
     public SimpleWorld world;
-    public RogueLikePlayer player;
+    public LocalPlayer player;
 
     public static RogueLikeServer INSTANCE;
 
@@ -42,12 +44,11 @@ public class RogueLikeServer extends NetworkedGame {
     private void setup() {
         lunar = new Lunar();
         lunar.initializeGame("Roguelike Server", 1280, 730, 20);
-        String str = "asdf";
 
         ArrayList<TileTemplate> tiles = SpriteSheetReader.loadSpritesAsTiles("tilesheet.png", 0);
 
         world = new SimpleWorld("first", 40, 22, 32, 32, tiles);
-        player = new RogueLikePlayer(world, 0, 20, 11, 100, 1);
+        player = new LocalPlayer(world, SpriteManager.load("player.png"), 20, 11, 32, 32, 0, 100, 1);
         lunar.getGame().addToStack(new MainState(lunar.getGame(), world, player, 1));
     }
 
@@ -57,8 +58,14 @@ public class RogueLikeServer extends NetworkedGame {
     }
 
     @Override
-    public PlayerEntity getPlayer() {
+    public LocalPlayer getPlayer() {
         return player;
+    }
+
+    @Override
+    public void disconnect() {
+        Networking.SERVER.stop();
+        System.exit(0);
     }
 
     @Override

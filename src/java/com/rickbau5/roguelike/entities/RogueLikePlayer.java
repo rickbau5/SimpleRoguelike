@@ -1,10 +1,7 @@
 package com.rickbau5.roguelike.entities;
 
-import me.vrekt.lunar.entity.Entity;
-import me.vrekt.lunar.entity.living.LivingEntity;
 import me.vrekt.lunar.entity.living.player.PlayerEntity;
 import me.vrekt.lunar.sprite.SpriteManager;
-import me.vrekt.lunar.tile.Tile;
 import me.vrekt.lunar.world.World;
 
 
@@ -21,25 +18,6 @@ public class RogueLikePlayer extends PlayerEntity {
         this.world = world;
 
         viewDistance = 5.0;
-    }
-
-    public boolean attemptMove(int xChange, int yChange) {
-        Tile t = world.getTileAt(x + xChange, y + yChange);
-        if (t != null && !t.isSolid()) {
-            Entity entity = world.getEntityAt(x + xChange, y + yChange);
-            if (entity instanceof LivingEntity) {
-                LivingEntity living = ((LivingEntity) entity);
-                living.damageEntity(damage);
-                System.out.println(living.getHealth());
-                return false;
-            } else {
-                this.x = x + xChange;
-                this.y = y + yChange;
-                return true;
-            }
-        } else {
-            return false;
-        }
     }
 
     public double getViewDistance() {
