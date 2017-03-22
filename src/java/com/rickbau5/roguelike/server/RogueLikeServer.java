@@ -3,9 +3,11 @@ package com.rickbau5.roguelike.server;
 import com.rickbau5.roguelike.MainState;
 import com.rickbau5.roguelike.SimpleWorld;
 import com.rickbau5.roguelike.SpriteSheetReader;
+import com.rickbau5.roguelike.entities.Monster;
 import com.rickbau5.roguelike.tiles.TileTemplate;
 import me.vrekt.lunar.Lunar;
 import me.vrekt.lunar.entity.living.player.LocalPlayer;
+import me.vrekt.lunar.server.EntityRegistry;
 import me.vrekt.lunar.server.NetworkedGame;
 import me.vrekt.lunar.server.Networking;
 import me.vrekt.lunar.server.SimpleServer;
@@ -35,6 +37,7 @@ public class RogueLikeServer extends NetworkedGame {
     }
 
     private void initServer() {
+        EntityRegistry.registerEntity(Monster.class);
         Networking.GAME_INSTANCE = this;
         SimpleServer server = new SimpleServer(this, "", 23456);
         Networking.SERVER = server;

@@ -1,10 +1,12 @@
 package com.rickbau5.roguelike;
 
+import com.rickbau5.roguelike.entities.Monster;
 import me.vrekt.lunar.entity.Entity;
 import me.vrekt.lunar.entity.living.LivingEntity;
 import me.vrekt.lunar.entity.living.player.PlayerEntity;
 import me.vrekt.lunar.server.Networking;
 import me.vrekt.lunar.server.packets.EntityMovementPacket;
+import me.vrekt.lunar.sprite.SpriteManager;
 import me.vrekt.lunar.tile.Tile;
 
 import java.awt.event.KeyEvent;
@@ -61,12 +63,17 @@ public class PlayerInputListener implements KeyListener {
                 if (Networking.GAME_INSTANCE != null) {
                     Networking.GAME_INSTANCE.disconnect();
                 }
+                break;
+            case 'p':
+                if (Networking.SERVER != null) {
+                    Networking.SERVER.spawnEntity(new Monster((SimpleWorld)playerEntity.world, SpriteManager.load("monster1.png"), playerEntity.getX() + 1, playerEntity.getY() + 1, 32, 32, ((SimpleWorld) playerEntity.world).getNextEntityIdAndInc(), 100, 1));
+                }
             default:
                 break;
         }
 
         if (moved) {
-            Networking.sendToAllClients(new EntityMovementPacket(playerEntity));
+            Networking.sendToAll(new EntityMovementPacket(playerEntity));
         }
     }
 

@@ -118,8 +118,6 @@ public class SimpleWorld extends World {
                 }
             }
         }
-
-        addEntity(new Monster(this, SpriteManager.load("monster1.png"), 10, 10, 32, 32, getNextEntityIdAndInc(), 100f, 1.0));
     }
 
     public Random getRandom() {
