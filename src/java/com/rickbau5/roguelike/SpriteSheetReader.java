@@ -24,10 +24,16 @@ public final class SpriteSheetReader {
     public static ArrayList<TileTemplate> loadSpritesAsTiles(String spritePath, int spriteSheetId) {
         String xmlPath = spritePath.substring(0, spritePath.lastIndexOf('.')) + ".xml";
         File xmlFile = new File(xmlPath);
-        assert xmlFile.exists();
+
+        if (!xmlFile.exists()) {
+            throw new IllegalStateException("Couldn't load the xml file from: " + xmlPath);
+        }
 
         BufferedImage img = SpriteManager.load(spritePath);
-        assert img != null;
+
+        if (img == null) {
+            throw new IllegalStateException("Couldn't load an image from the path: " + spritePath);
+        }
 
         ArrayList<TileTemplate> tiles = new ArrayList<>();
 
